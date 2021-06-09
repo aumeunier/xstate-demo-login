@@ -3,7 +3,7 @@ import { LoginPage } from "./Login";
 
 function App() {
   return (
-    <div className="bg-black">
+    <div>
       <main>
         <LoginPage />
       </main>
