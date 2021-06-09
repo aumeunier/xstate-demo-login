@@ -20,5 +20,5 @@
 
 ## Steps
 
-* Base application with no JS
+* Base application with no JS #5ac6563
 
