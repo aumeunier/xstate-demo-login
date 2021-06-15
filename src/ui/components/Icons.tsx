@@ -1,9 +1,15 @@
+import cn from "classnames";
 import React from "react";
 
-export const LockIcon = () => (
+interface ButtonProps {
+  disabled?: boolean;
+}
+export const LockIcon = ({ disabled }: ButtonProps) => (
   <span className="absolute left-0 inset-y-0 flex items-center pl-3">
     <svg
-      className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"
+      className={cn("h-5 w-5", {
+        "text-indigo-500 group-hover:text-indigo-400": !disabled,
+      })}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 20 20"
       fill="currentColor"

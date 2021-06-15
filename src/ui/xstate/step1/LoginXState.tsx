@@ -1,10 +1,14 @@
+import { useMachine } from "@xstate/react";
 import React from "react";
-import { FormCheckbox } from "./components/FormCheckbox";
-import { FormInput } from "./components/FormInput";
-import { LockIcon } from "./components/Icons";
-import { LoginHeader } from "./LoginHeader";
+import { Button } from "../../components/Button";
+import { FormCheckbox } from "../../components/FormCheckbox";
+import { FormInput } from "../../components/FormInput";
+import { LoginHeader } from "../../components/LoginHeader";
+import { LoginEvents, LoginMachine, LoginStates } from "./LoginMachine";
 
-export const LoginPage = () => {
+export const LoginXStatePage = () => {
+  const [machine, sendToMachine] = useMachine(LoginMachine);
+  const currentState = machine.value;
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
@@ -15,12 +19,18 @@ export const LoginPage = () => {
               label="Email"
               id="email-address"
               additionalClasses="rounded-t-md"
+              onChange={(login) =>
+                sendToMachine(LoginEvents.UpdateLogin, { login })
+              }
             />
             <FormInput
               isPassword
               label="Password"
               id="password"
               additionalClasses="rounded-b-md"
+              onChange={(password) =>
+                sendToMachine(LoginEvents.UpdatePassword, { password })
+              }
             />
           </div>
 
@@ -37,10 +47,10 @@ export const LoginPage = () => {
             </div>
           </div>
           <div>
-            <button className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-              <LockIcon />
-              Sign in
-            </button>
+            <Button
+              onClick={() => sendToMachine(LoginEvents.Validate)}
+              disabled={currentState !== LoginStates.EditingComplete}
+            />
           </div>
         </div>
       </div>

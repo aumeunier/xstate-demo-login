@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Machine } from 'xstate';
+import { assign, Machine } from 'xstate';
 
 export enum LoginStates {
     Editing = "editing",
@@ -52,11 +52,7 @@ export const passwordIsValid = (context: LoginContext): boolean =>
 
 const onUpdate = {
     target: LoginStates.Editing,
-    actions: (context: LoginContext, event: UpdateLogin | UpdatePassword) =>
-    ({
-        login: 'login' in event ? event.login : context.login,
-        password: 'password' in event ? event.password : context.password,
-    })
+    actions: "update"
 };
 export const LoginMachine = Machine<LoginContext, LoginSchema, LoginEvent>({
     id: 'login',
@@ -71,13 +67,13 @@ export const LoginMachine = Machine<LoginContext, LoginSchema, LoginEvent>({
             }],
             on: {
                 [LoginEvents.UpdateLogin]: onUpdate,
-                [LoginEvents.UpdatePassword]: onUpdate
+                [LoginEvents.UpdatePassword]: onUpdate,
             }
         },
         [LoginStates.EditingComplete]: {
             always: [{
                 target: LoginStates.Editing,
-                cond: (context: LoginContext, event: LoginEvent) => !!(loginIsValid(context) && passwordIsValid(context)),
+                cond: (context: LoginContext, event: LoginEvent) => !(loginIsValid(context) && passwordIsValid(context)),
             }],
             on: {
                 [LoginEvents.UpdateLogin]: onUpdate,
@@ -134,7 +130,16 @@ export const LoginMachine = Machine<LoginContext, LoginSchema, LoginEvent>({
             submitAsync: async (context: LoginContext): Promise<boolean> => {
                 console.debug(`Authenticating with: ${context.login}, ${context.password}`)
                 await new Promise(res => setTimeout(res, 5000));
-                return Promise.resolve(true);
+                return Promise.resolve(context.login === "aurelien" && context.password === "meunier");
             }
+        },
+        actions: {
+            update: assign((context: LoginContext, event: LoginEvent) => {
+                return {
+                    ...context,
+                    login: 'login' in event ? event.login : context.login,
+                    password: 'password' in event ? event.password : context.password,
+                }
+            }),
         }
     });

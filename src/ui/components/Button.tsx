@@ -18,7 +18,7 @@ export const Button = (props: ButtonProps) => (
       }
     )}
   >
-    <LockIcon />
+    <LockIcon disabled={props.disabled} />
     Sign in
   </button>
 );
