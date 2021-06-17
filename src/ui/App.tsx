@@ -2,8 +2,8 @@ import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import HomePage from "./Home";
 import { LoginPage } from "./standard/step1/Login";
-import { LoginXStateFinal } from "./xstate/final/LoginMachineFinal";
 import { LoginXStatePage } from "./xstate/step1/LoginXState";
+import { LoginXStateFinal } from "./xstate/step2/LoginXStateFinal";
 
 function App() {
   return (

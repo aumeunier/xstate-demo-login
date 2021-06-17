@@ -20,7 +20,6 @@ interface ButtonProps {
 }
 export const AuthButton = ({ machine, sendToMachine }: ButtonProps) => {
   const currentState = machine.value;
-  console.debug(`Auth button -- ${currentState}`);
   let validationText = "Log in";
   let color = undefined;
   switch (currentState) {

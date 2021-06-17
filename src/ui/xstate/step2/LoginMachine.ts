@@ -109,4 +109,5 @@ export const LoginMachineFinal = Machine<LoginContext, LoginSchema, LoginEvent>(
                 }
             }),
         }
-    });
+    }
+);
