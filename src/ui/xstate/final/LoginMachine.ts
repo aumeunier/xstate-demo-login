@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { assign, Machine } from 'xstate';
 import { LoginEvents } from '../../../logic/LoginEvents';
-import type { LoginContext, LoginEvent, LoginSchema } from '../../../logic/LoginMachine';
+import type { LoginContext, LoginEvent, LoginSchema } from '../../../logic/LoginMachine.d';
 import { LoginStates } from '../../../logic/LoginStates';
 
 

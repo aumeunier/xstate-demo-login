@@ -93,14 +93,14 @@ export const LoginMachineStep1 = Machine<LoginContext, LoginSchema, LoginEvent>(
         [LoginStates.Authenticated]: {
             type: "final"
         },
-        // TODO: Too many tentatives, you have been blocked!
     },
 },
     {
         services: {
             submitAsync: async (context: LoginContext): Promise<boolean> => {
                 console.debug(`Authenticating with: ${context.login}, ${context.password}`)
-                await new Promise(res => setTimeout(res, 5000));
+                // We would probably have some service call logic handled in another file here
+                await new Promise(res => setTimeout(res, 2000));
                 return Promise.resolve(true);
             }
         },

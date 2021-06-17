@@ -2,7 +2,7 @@ import _ from "lodash";
 import React from "react";
 import { State } from "xstate";
 import { LoginEvents } from "../../../logic/LoginEvents";
-import { LoginContext, LoginEvent } from "../../../logic/LoginMachine";
+import { LoginContext, LoginEvent } from "../../../logic/LoginMachine.d";
 import { LoginStates } from "../../../logic/LoginStates";
 import { Button } from "../../components/Button";
 

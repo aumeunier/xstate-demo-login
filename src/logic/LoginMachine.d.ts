@@ -1,4 +1,4 @@
-import { LoginStates } from '../../../logic/LoginStates';
+import { LoginStates } from './LoginStates';
 
 export type LoginContext = {
     login?: string;
