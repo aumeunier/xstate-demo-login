@@ -9,7 +9,7 @@ const onUpdate = {
     target: LoginStates.Editing,
     actions: "update"
 };
-export const LoginMachineFinal = Machine<LoginContext, LoginSchema, LoginEvent>({
+export const LoginMachineV2 = Machine<LoginContext, LoginSchema, LoginEvent>({
     id: 'login',
     initial: LoginStates.Editing,
 

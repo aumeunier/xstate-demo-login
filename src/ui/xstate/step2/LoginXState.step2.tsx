@@ -4,14 +4,14 @@ import React from "react";
 import { LoginEvents } from "../../../logic/LoginEvents";
 import { LoginStates } from "../../../logic/LoginStates";
 import { FormInput } from "../../components/FormInput";
+import { LoginHeader } from "../../components/LoginHeader";
 import { OtherActions } from "../../components/OtherActions";
-import { AuthButton } from "./AuthButton";
-import { AuthHeader } from "./AuthHeader";
-import { LoginMachineFinal } from "./LoginMachine";
+import { AuthButton } from "./AuthButton.step2";
+import { LoginMachineV2 } from "./LoginMachine.step2";
 
 export const LoginXStateV2 = () => {
   const [machine, sendToMachine, machineInterpreter] =
-    useMachine(LoginMachineFinal);
+    useMachine(LoginMachineV2);
   const currentState = machine.value;
   const { invalidLogin, invalidPasswordMessage } = machine.context;
 
@@ -23,7 +23,7 @@ export const LoginXStateV2 = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
-        <AuthHeader />
+        <LoginHeader />
         <div className="mt-8 space-y-6">
           <div className="rounded-md shadow-sm -space-y-px">
             <FormInput

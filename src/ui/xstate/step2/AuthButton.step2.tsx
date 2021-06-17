@@ -6,7 +6,7 @@ import { LoginContext, LoginEvent } from "../../../logic/LoginMachine";
 import { LoginStates } from "../../../logic/LoginStates";
 import { Button } from "../../components/Button";
 
-interface ButtonProps {
+interface AuthButtonProps {
   machine: State<
     LoginContext,
     LoginEvent,
@@ -18,7 +18,7 @@ interface ButtonProps {
   >;
   sendToMachine: (e: LoginEvents) => void;
 }
-export const AuthButton = ({ machine, sendToMachine }: ButtonProps) => {
+export const AuthButton = ({ machine, sendToMachine }: AuthButtonProps) => {
   const currentState = machine.value;
   let validationText = "Log in";
   let color = undefined;
