@@ -2,44 +2,14 @@ import _ from 'lodash';
 import { assign, Machine } from 'xstate';
 import { LoginEvents } from '../../../logic/LoginEvents';
 import { LoginStates } from '../../../logic/LoginStates';
+import type { LoginContext, LoginEvent, LoginSchema } from './LoginMachine.d';
 
-interface LoginContext {
-    login?: string;
-    password?: string;
-}
-interface LoginSchema {
-    states: {
-        [LoginStates.Editing]: {},
-        [LoginStates.EditingComplete]: {},
-        [LoginStates.Submitting]: {},
-        [LoginStates.InvalidCredentials]: {},
-        [LoginStates.AuthenticationFailed]: {},
-        [LoginStates.Authenticated]: {},
-    }
-}
-export type UpdateLogin = {
-    type: LoginEvents.UpdateLogin,
-    login: string,
-}
-export type UpdatePassword = {
-    type: LoginEvents.UpdatePassword,
-    password: string,
-}
-export type LoginEvent =
-    | { type: LoginEvents }
-    | UpdateLogin
-    | UpdatePassword;
-
-export const loginIsValid = (context: LoginContext): boolean =>
-    !_.isEmpty(context.login);
-export const passwordIsValid = (context: LoginContext): boolean =>
-    !!(context.password && context.password.length > 6);
 
 const onUpdate = {
     target: LoginStates.Editing,
     actions: "update"
 };
-export const LoginMachineStep1 = Machine<LoginContext, LoginSchema, LoginEvent>({
+export const LoginMachineFinal = Machine<LoginContext, LoginSchema, LoginEvent>({
     id: 'login',
     initial: LoginStates.Editing,
 
@@ -48,7 +18,7 @@ export const LoginMachineStep1 = Machine<LoginContext, LoginSchema, LoginEvent>(
         [LoginStates.Editing]: {
             always: [{
                 target: LoginStates.EditingComplete,
-                cond: (context: LoginContext, event: LoginEvent) => loginIsValid(context) && passwordIsValid(context),
+                cond: 'credentialsFilled',
             }],
             on: {
                 [LoginEvents.UpdateLogin]: onUpdate,
@@ -56,10 +26,10 @@ export const LoginMachineStep1 = Machine<LoginContext, LoginSchema, LoginEvent>(
             }
         },
         [LoginStates.EditingComplete]: {
-            always: [{
-                target: LoginStates.Editing,
-                cond: (context: LoginContext, event: LoginEvent) => !(loginIsValid(context) && passwordIsValid(context)),
-            }],
+            always: [
+                { target: LoginStates.InvalidCredentials, cond: 'loginIsInvalid', actions: 'updateError' },
+                { target: LoginStates.InvalidCredentials, cond: 'passwordIsInvalid', actions: 'updateError' },
+            ],
             on: {
                 [LoginEvents.UpdateLogin]: onUpdate,
                 [LoginEvents.UpdatePassword]: onUpdate,
@@ -72,12 +42,19 @@ export const LoginMachineStep1 = Machine<LoginContext, LoginSchema, LoginEvent>(
                 onError: {
                     target: LoginStates.AuthenticationFailed,
                 },
-                onDone: {
+                onDone: [{
                     target: LoginStates.Authenticated,
-                }
+                    cond: (context, event) => {
+                        return event?.data === true;
+                    },
+                }, {
+                    target: LoginStates.AuthenticationFailed,
+                }]
             }
         },
         [LoginStates.InvalidCredentials]: {
+            entry: ['updateError'],
+            exit: ['updateError'],
             on: {
                 [LoginEvents.UpdateLogin]: onUpdate,
                 [LoginEvents.UpdatePassword]: onUpdate
@@ -97,14 +74,33 @@ export const LoginMachineStep1 = Machine<LoginContext, LoginSchema, LoginEvent>(
     },
 },
     {
+        guards: {
+            loginIsInvalid: (context: LoginContext): boolean =>
+                _.isEmpty(context.login),
+            passwordIsInvalid: (context: LoginContext): boolean =>
+                !(context.password && context.password.length > 6),
+            credentialsFilled: (context: LoginContext): boolean => !_.isEmpty(context.login) && !_.isEmpty(context.password),
+        },
         services: {
             submitAsync: async (context: LoginContext): Promise<boolean> => {
-                console.debug(`Authenticating with: ${context.login}, ${context.password}`)
-                await new Promise(res => setTimeout(res, 5000));
-                return Promise.resolve(true);
+                console.debug(`Authenticating with: ${context.login} -- ${context.password}`)
+                await new Promise(res => setTimeout(res, 2000));
+                const serverError = false;
+                if (serverError)
+                    return Promise.reject();
+                const success = context.login === "mylogin" && context.password === "mypassword";
+                return Promise.resolve(success);
             }
         },
         actions: {
+            updateError: assign((context: LoginContext, event: LoginEvent) => {
+                const login = 'login' in event ? event.login : context.login;
+                const password = 'password' in event ? event.password : context.password;
+                return {
+                    invalidLogin: _.isEmpty(login),
+                    invalidPasswordMessage: (password?.length ?? 0) > 6 ? undefined : "Trop court!",
+                }
+            }),
             update: assign((context: LoginContext, event: LoginEvent) => {
                 return {
                     ...context,

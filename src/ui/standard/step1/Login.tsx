@@ -47,6 +47,7 @@ export const LoginPage = () => {
             <Button
               onClick={() => {}}
               disabled={!(loginIsValid() && passwordIsValid())}
+              text="Log in"
             />
           </div>
         </div>

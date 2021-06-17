@@ -14,7 +14,7 @@ export const LoginMachine = createMachine({
         "submitting": {},
         "errorEmail": {},
         "errorPassword": {},
-        "errorCredentials": {},
+        "AuthenticationFailed": {},
         "errorServiceDown": {},
         "authenticated": {}
     }
