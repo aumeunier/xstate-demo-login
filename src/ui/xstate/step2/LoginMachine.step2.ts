@@ -10,7 +10,7 @@ const onUpdate = {
     actions: "update"
 };
 export const LoginMachineV2 = Machine<LoginContext, LoginSchema, LoginEvent>({
-    id: 'login',
+    id: 'login.step2',
     initial: LoginStates.Editing,
 
     // State definitions

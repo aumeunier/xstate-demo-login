@@ -1,25 +1,15 @@
 import _ from "lodash";
-import React from "react";
-import { State } from "xstate";
+import React, { useContext } from "react";
 import { LoginEvents } from "../../../logic/LoginEvents";
-import { LoginContext, LoginEvent } from "../../../logic/LoginMachine.d";
 import { LoginStates } from "../../../logic/LoginStates";
 import { Button } from "../../components/Button";
+import { Authenticator } from "./AuthMachine/Authenticator";
 
-interface ButtonProps {
-  machine: State<
-    LoginContext,
-    LoginEvent,
-    any,
-    {
-      value: any;
-      context: LoginContext;
-    }
-  >;
-  sendToMachine: (e: LoginEvents) => void;
-}
-export const AuthButton = ({ machine, sendToMachine }: ButtonProps) => {
+export const AuthButton = () => {
+  const { loginMachine: authMachine } = useContext(Authenticator);
+  const [machine, authAction] = authMachine!;
   const currentState = machine.value;
+
   let validationText = "Log in";
   let color = undefined;
   switch (currentState) {
@@ -40,7 +30,7 @@ export const AuthButton = ({ machine, sendToMachine }: ButtonProps) => {
   return (
     <div>
       <Button
-        onClick={() => sendToMachine(LoginEvents.Validate)}
+        onClick={() => authAction(LoginEvents.Validate)}
         disabled={
           !_.includes(
             [LoginStates.EditingComplete, LoginStates.AuthenticationFailed],

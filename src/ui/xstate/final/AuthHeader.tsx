@@ -1,11 +1,12 @@
-import { useMachine } from "@xstate/react";
-import React from "react";
-import { AuthStates } from "../../../logic/AuthStates";
-import { LoginMachineFinal } from "./LoginMachine";
+import React, { useContext } from "react";
+import { Authenticator } from "./AuthMachine/Authenticator";
+import { AuthEvents, AuthStates } from "./AuthMachine/AuthMachine.d";
 
 export const AuthHeader = () => {
-  const [machine] = useMachine(LoginMachineFinal);
+  const { authMachine } = useContext(Authenticator);
+  const [machine, authAction] = authMachine!;
   const currentState = machine.value;
+
   return (
     <div>
       <img className="mx-auto h-12 w-auto" src="/d-edge.png" alt="D-EDGE" />
@@ -14,14 +15,20 @@ export const AuthHeader = () => {
       </h2>
       <p className="mt-2 text-center text-sm text-gray-600">
         Or{" "}
-        <a
-          href="#"
-          className="font-medium text-indigo-600 hover:text-indigo-500"
+        <span
+          className="cursor-pointer font-medium text-indigo-600 hover:text-indigo-500"
+          onClick={() =>
+            authAction(
+              currentState === AuthStates.Register
+                ? AuthEvents.SignIn
+                : AuthEvents.Register
+            )
+          }
         >
           {currentState === AuthStates.Register
             ? "sign in"
             : "create your account"}
-        </a>
+        </span>
       </p>
     </div>
   );
