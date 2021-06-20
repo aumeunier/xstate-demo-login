@@ -12,7 +12,7 @@ export type LoginContext = {
 const isComplete = (context: LoginContext): boolean =>
     !_.isEmpty(context.login) && !!(context.password && context.password.length > 6);
 
-export const LoginFormMachine = CreateFormMachine<LoginContext>({
+export const LoginOptions = {
     guards: {
         isFormComplete: isComplete,
         isFormIncomplete: (context: LoginContext) => !isComplete(context),
@@ -62,4 +62,5 @@ export const LoginFormMachine = CreateFormMachine<LoginContext>({
             }
         }),
     }
-});
+};
+export const LoginFormMachine = CreateFormMachine<LoginContext>(LoginOptions);
