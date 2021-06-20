@@ -1,9 +1,35 @@
-import { AssignAction, Machine } from "xstate";
-import { FormEvent, FormEvents, FormSchema, FormStates } from "./FormMachine.d";
+import { AssignAction, DoneEventObject, Machine, MachineConfig, MachineOptions } from "xstate";
+import { FormEvent, FormEvents, FormSchema, FormStates } from "./FormMachineDef";
 
+/**
+ * Constructor for a FormMachine, using the abstract configuration of the FormMachine.
+ * Requires the implementation of the services (called "Options" in XState).
+ * See https://xstate.js.org/docs/guides/machines.html#options
+ * 
+ * @param services required implementation of the actions, activities, delays, guards and services
+ *  that are referenced as strings in the machine configuration.
+ * @returns 
+ */
+export const CreateFormMachine = <T>(services: FormMachineServices<T>) => {
+    return Machine<T, FormSchema, FormEvents>(
+        FormMachineConfig,
+        services
+    );
+}
 
+// Utility as the FormUpdate transition is often used in the Machine
 const onFormUpdate = { target: FormStates.Editing, actions: "onUpdate" };
-export const FormMachine = {
+/**
+ * This is the definition of the StateMachine.
+ * This machine defines a generic behavior for a form feature:
+ * - events (update, submitting, result of the submit)
+ * - transitions
+ * - guards/actions/services to call WITHOUT defining them
+ * 
+ * Note that the "context" is set as 'any' because the machine itself does not
+ * deal with the context within the form.
+ */
+const FormMachineConfig: MachineConfig<any, FormSchema, FormEvents> = {
     id: 'formMachine',
     initial: FormStates.Editing,
 
@@ -18,9 +44,9 @@ export const FormMachine = {
             }
         },
         [FormStates.EditingComplete]: {
-            always: [
-                { target: FormStates.InvalidForm, cond: 'isFormIncomplete', actions: 'updateError' },
-            ],
+            // always: [
+            //     { target: FormStates.InvalidForm, cond: 'isFormIncomplete', actions: 'updateError' },
+            // ],
             on: {
                 [FormEvent.UpdateForm]: onFormUpdate,
                 [FormEvent.Validate]: FormStates.Submitting,
@@ -66,12 +92,16 @@ export const FormMachine = {
     },
 };
 
-export interface FormMachineServices<T> {
+/**
+ * Interface for a Form Machine implementation.
+ * In order to be complete, the form machine needs several guards, services and actions.
+ */
+export interface FormMachineServices<T> extends Partial<MachineOptions<T, FormEvents>> {
     guards: {
         isFormComplete: (context: T) => boolean,
-        isFormInvalid: (context: T) => boolean,
-        isFormValidated: (context: T) => boolean,
-        shouldBlock: (context: T) => boolean,
+        isFormIncomplete: (context: T) => boolean,
+        isFormValidated: (context: T, event: DoneEventObject) => boolean,
+        shouldBlock: (context: T, event: DoneEventObject) => boolean,
     },
     services: {
         submitAsync: (context: T) => Promise<any>,
@@ -84,10 +114,3 @@ export interface FormMachineServices<T> {
         onValidated: AssignAction<T, FormEvents>,
     }
 };
-export const CreateFormMachine = <T>(services: FormMachineServices<T>) => {
-    return Machine<T, FormSchema, FormEvents>(
-        FormMachine,
-        services
-    );
-}
-

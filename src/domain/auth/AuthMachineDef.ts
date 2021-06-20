@@ -1,3 +1,5 @@
+import { EventObject, StateSchema } from "xstate"
+
 export type AuthContext = {
     login?: string;
     password?: string;
@@ -12,7 +14,7 @@ export enum AuthStates {
     Authenticated = "authenticated"
 }
 
-export type AuthSchema = {
+export type AuthSchema = StateSchema<any> & {
     states: {
         [AuthStates.Register]: {},
         [AuthStates.SignIn]: {},
@@ -42,10 +44,10 @@ export type UpdateLoginForm = {
     password?: string,
 }
 
-export type AuthEvent =
-    | { type: AuthEvents.Validate }
+export type AuthEvent = EventObject &
+{ type: AuthEvents.Validate }
     | { type: AuthEvents.Register }
-    | { type: AuthEvents.Login }
+    | { type: AuthEvents.SignIn }
     | { type: AuthEvents.Forgot }
     | UpdateRegisterForm
     | UpdateLoginForm;

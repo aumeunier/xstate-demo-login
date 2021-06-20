@@ -1,13 +1,14 @@
 import React from "react";
 import { Interpreter, State } from "xstate";
-import { LoginContext, LoginEvent, LoginSchema } from "../../../../logic/LoginMachine";
-import { AuthContext, AuthEvent, AuthSchema } from "./AuthMachine.d";
+import { FormEvents, FormSchema } from "../forms/FormMachineDef";
+import { LoginContext } from "../forms/LoginFormMachine";
+import { AuthContext, AuthEvent, AuthSchema } from "./AuthMachineDef";
 
 export interface AuthProps {
     loginMachine?: [
-        State<LoginContext, LoginEvent, LoginSchema>,
-        Interpreter<LoginContext, LoginSchema, LoginEvent>['send'],
-        Interpreter<LoginContext, LoginSchema, LoginEvent>
+        State<LoginContext, FormEvents, FormSchema>,
+        Interpreter<LoginContext, FormSchema, FormEvents>['send'],
+        Interpreter<LoginContext, FormSchema, FormEvents>
     ],
     authMachine?: [
         State<AuthContext, AuthEvent, AuthSchema>,

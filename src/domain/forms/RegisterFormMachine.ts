@@ -1,13 +1,21 @@
 import _ from "lodash";
 import { assign } from "xstate";
 import { CreateFormMachine } from "./FormMachine";
-import { FormEvents } from "./FormMachine.d";
-import { RegisterContext } from "./RegisterContext";
+import { FormEvents } from "./FormMachineDef";
+
+export type RegisterContext = {
+    login?: string;
+    password?: string;
+    consent?: boolean;
+    invalidLogin?: boolean,
+    invalidConsent?: boolean,
+    invalidPasswordMessage?: string,
+}
 
 export const RegisterFormMachine = CreateFormMachine<RegisterContext>({
     guards: {
         isFormComplete: (context: RegisterContext) => true,
-        isFormInvalid: (context: RegisterContext) => true,
+        isFormIncomplete: (context: RegisterContext) => true,
         isFormValidated: (context: RegisterContext) => true,
         shouldBlock: (context: RegisterContext) => true,
     },

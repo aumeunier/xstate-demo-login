@@ -1,17 +1,17 @@
 import { useMachine } from "@xstate/react";
 import React from "react";
+import { Authenticator } from "../../../domain/auth/Authenticator";
+import { AuthMachine } from "../../../domain/auth/AuthMachine";
+import { LoginFormMachine } from "../../../domain/forms/LoginFormMachine";
 import { AuthButton } from "./AuthButton";
 import { AuthHeader } from "./AuthHeader";
-import { Authenticator } from "./AuthMachine/Authenticator";
-import { AuthMachine } from "./AuthMachine/AuthMachine";
-import { LoginMachineFinal } from "./LoginMachine";
 import { LoginXStateFinal } from "./LoginXState.final";
 
 export const AuthPage = () => {
   const [authMachine, sendToAuthMachine, authMachineInterpreter] =
     useMachine(AuthMachine);
   const [machine, sendToMachine, machineInterpreter] =
-    useMachine(LoginMachineFinal);
+    useMachine(LoginFormMachine);
 
   return (
     <Authenticator.Provider

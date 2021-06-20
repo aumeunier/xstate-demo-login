@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
-import { Authenticator } from "./AuthMachine/Authenticator";
-import { AuthEvents, AuthStates } from "./AuthMachine/AuthMachine.d";
+import { Authenticator } from "../../../domain/auth/Authenticator";
+import { AuthEvents, AuthStates } from "../../../domain/auth/AuthMachineDef";
 
 export const AuthHeader = () => {
   const { authMachine } = useContext(Authenticator);

@@ -1,5 +1,5 @@
 import { Machine } from 'xstate';
-import { AuthContext, AuthEvent, AuthEvents, AuthSchema, AuthStates } from './AuthMachine.d';
+import { AuthContext, AuthEvent, AuthEvents, AuthSchema, AuthStates } from './AuthMachineDef';
 
 
 export const AuthMachine = Machine<AuthContext, AuthSchema, AuthEvent>({

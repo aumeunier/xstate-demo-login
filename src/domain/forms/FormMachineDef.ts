@@ -1,3 +1,4 @@
+import { StateSchema } from "xstate";
 
 export enum FormStates {
     Editing = "editing",
@@ -8,7 +9,7 @@ export enum FormStates {
     Validated = "validated",
     Blocked = "blocked"
 }
-export type FormSchema = {
+export type FormSchema = StateSchema<any> & {
     states: {
         [FormStates.Editing]: {},
         [FormStates.EditingComplete]: {},

@@ -1,27 +1,31 @@
 import _ from "lodash";
 import React, { useContext } from "react";
-import { LoginEvents } from "../../../logic/LoginEvents";
+import { Authenticator } from "../../../domain/auth/Authenticator";
+import { FormEvent, FormStates } from "../../../domain/forms/FormMachineDef";
 import { LoginStates } from "../../../logic/LoginStates";
 import { Button } from "../../components/Button";
-import { Authenticator } from "./AuthMachine/Authenticator";
 
 export const AuthButton = () => {
   const { loginMachine: authMachine } = useContext(Authenticator);
   const [machine, authAction] = authMachine!;
-  const currentState = machine.value;
+  const { value: currentState, context } = machine;
 
   let validationText = "Log in";
   let color = undefined;
   switch (currentState) {
-    case LoginStates.Authenticated:
+    case FormStates.Editing:
+      console.debug(context);
+      validationText = context.invalidMessage ?? "Nope.";
+      break;
+    case FormStates.Validated:
       validationText = "Authenticated";
       color = "bg-green-600";
       break;
-    case LoginStates.Submitting:
+    case FormStates.Submitting:
       validationText = "Verifying credentials";
       color = "bg-gray-300";
       break;
-    case LoginStates.AuthenticationFailed:
+    case FormStates.ValidationFailed:
       validationText = "Retry ?";
       color = "bg-red-600";
       break;
@@ -30,7 +34,7 @@ export const AuthButton = () => {
   return (
     <div>
       <Button
-        onClick={() => authAction(LoginEvents.Validate)}
+        onClick={() => authAction(FormEvent.Validate)}
         disabled={
           !_.includes(
             [LoginStates.EditingComplete, LoginStates.AuthenticationFailed],
