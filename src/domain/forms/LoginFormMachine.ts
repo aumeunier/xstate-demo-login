@@ -57,6 +57,7 @@ export const LoginFormMachine = CreateFormMachine<LoginContext>({
         onUpdate: assign((context: LoginContext, event: FormEvents) => {
             return {
                 ...context,
+                invalidMessage: undefined,
                 ..._.get(event, 'formData'),
             }
         }),

@@ -14,7 +14,6 @@ export const AuthButton = () => {
   let color = undefined;
   switch (currentState) {
     case FormStates.Editing:
-      console.debug(context);
       validationText = context.invalidMessage ?? "Nope.";
       break;
     case FormStates.Validated:
@@ -26,7 +25,7 @@ export const AuthButton = () => {
       color = "bg-gray-300";
       break;
     case FormStates.ValidationFailed:
-      validationText = "Retry ?";
+      validationText = context.invalidMessage ?? "Retry ?";
       color = "bg-red-600";
       break;
   }
