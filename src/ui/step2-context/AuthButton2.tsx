@@ -1,10 +1,10 @@
 import _ from "lodash";
 import React from "react";
 import { State } from "xstate";
-import { LoginEvents } from "../../../logic/LoginEvents";
-import { LoginContext, LoginEvent } from "../../../logic/LoginMachine";
-import { LoginStates } from "../../../logic/LoginStates";
-import { Button } from "../../components/Button";
+import { LoginEvents } from "../../domain/login/LoginEvents";
+import { LoginContext, LoginEvent } from "../../domain/login/LoginMachineDef";
+import { LoginStates } from "../../domain/login/LoginStates";
+import { Button } from "../components/Button";
 
 interface AuthButtonProps {
   machine: State<

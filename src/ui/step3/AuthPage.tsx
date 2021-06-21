@@ -1,11 +1,11 @@
 import { useMachine } from "@xstate/react";
 import React from "react";
-import { Authenticator } from "../../../domain/auth/Authenticator";
-import { AuthMachine } from "../../../domain/auth/AuthMachine";
-import { LoginFormMachine } from "../../../domain/forms/LoginFormMachine";
+import { Authenticator } from "../../domain/auth/Authenticator";
+import { AuthMachine } from "../../domain/auth/AuthMachine";
+import { LoginFormMachine } from "../../domain/forms/LoginFormMachine";
 import { AuthButton } from "./AuthButton";
 import { AuthHeader } from "./AuthHeader";
-import { LoginXStateFinal } from "./LoginXState.final";
+import { LoginOrRegister } from "./SignInOrRegister";
 
 export const AuthPage = () => {
   const [authMachine, sendToAuthMachine, authMachineInterpreter] =
@@ -23,7 +23,7 @@ export const AuthPage = () => {
       <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <AuthHeader />
-          <LoginXStateFinal />
+          <LoginOrRegister />
           <AuthButton />
         </div>
       </div>

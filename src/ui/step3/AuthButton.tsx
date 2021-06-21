@@ -1,9 +1,9 @@
 import _ from "lodash";
 import React, { useContext } from "react";
-import { Authenticator } from "../../../domain/auth/Authenticator";
-import { FormEvent, FormStates } from "../../../domain/forms/FormMachineDef";
-import { LoginStates } from "../../../logic/LoginStates";
-import { Button } from "../../components/Button";
+import { Authenticator } from "../../domain/auth/Authenticator";
+import { FormEvent, FormStates } from "../../domain/forms/FormMachineDef";
+import { LoginStates } from "../../domain/login/LoginStates";
+import { Button } from "../components/Button";
 
 export const AuthButton = () => {
   const { loginMachine: authMachine } = useContext(Authenticator);

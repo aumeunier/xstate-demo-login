@@ -29,6 +29,7 @@ export const FormInput = (props: FormInputProps) => {
             [props.additionalClasses]: props.additionalClasses,
             "border-red-600": props.isInvalid,
             "border-gray-300": !props.isInvalid,
+            "bg-gray-200": props.disabled,
           }
         )}
         placeholder={props.label}

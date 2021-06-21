@@ -67,10 +67,10 @@ const FormMachineConfig = Machine({
             }
         },
         "Validated": {
-            // type: 'final'
+            type: 'final'
         },
         "Blocked": {
-            // type: 'parallel',
+            type: 'final'
         },
     },
 });

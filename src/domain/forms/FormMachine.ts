@@ -84,10 +84,10 @@ const FormMachineConfig: MachineConfig<any, FormSchema, FormEvents> = {
             }
         },
         [FormStates.Validated]: {
-            // type: 'final'
+            type: 'final'
         },
         [FormStates.Blocked]: {
-            // type: 'parallel',
+            type: 'final'
         },
     },
 };

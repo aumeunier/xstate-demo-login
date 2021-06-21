@@ -1,12 +1,12 @@
 import _ from "lodash";
 import React, { useContext } from "react";
-import { Authenticator } from "../../../domain/auth/Authenticator";
-import { AuthStates } from "../../../domain/auth/AuthMachineDef";
-import { FormEvent, FormStates } from "../../../domain/forms/FormMachineDef";
-import { FormInput } from "../../components/FormInput";
-import { OtherActions } from "../../components/OtherActions";
+import { Authenticator } from "../../domain/auth/Authenticator";
+import { AuthStates } from "../../domain/auth/AuthMachineDef";
+import { FormEvent, FormStates } from "../../domain/forms/FormMachineDef";
+import { FormInput } from "../components/FormInput";
+import { OtherActions } from "../components/OtherActions";
 
-export const LoginXStateFinal = () => {
+export const LoginOrRegister = () => {
   const { loginMachine, authMachine } = useContext(Authenticator);
   const [machine, authAction, authInterpreter] = loginMachine!;
   const [auth] = authMachine!;
@@ -74,7 +74,7 @@ export const LoginXStateFinal = () => {
         {/* TODO: other actions should depend on state */}
       </div>
 
-      <OtherActions />
+      {authState === AuthStates.SignIn && <OtherActions />}
     </div>
   );
 };

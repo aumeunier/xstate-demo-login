@@ -1,14 +1,14 @@
 import { useMachine } from "@xstate/react";
 import React from "react";
-import { LoginEvents } from "../../../logic/LoginEvents";
-import { LoginStates } from "../../../logic/LoginStates";
-import { Button } from "../../components/Button";
-import { FormInput } from "../../components/FormInput";
-import { LoginHeader } from "../../components/LoginHeader";
-import { OtherActions } from "../../components/OtherActions";
-import { LoginMachineStep1 } from "./LoginMachine.step1";
+import { LoginEvents } from "../../domain/login/LoginEvents";
+import { LoginStates } from "../../domain/login/LoginStates";
+import { Button } from "../components/Button";
+import { FormInput } from "../components/FormInput";
+import { LoginHeader } from "../components/LoginHeader";
+import { OtherActions } from "../components/OtherActions";
+import { LoginMachineStep1 } from "./LoginMachine1";
 
-export const LoginXStatePage = () => {
+export const LoginXState1 = () => {
   // Initialize a machine
   const [machine, sendToMachine] = useMachine(LoginMachineStep1);
 

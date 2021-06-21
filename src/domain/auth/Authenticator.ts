@@ -2,7 +2,7 @@ import React from "react";
 import { Interpreter, State } from "xstate";
 import { FormEvents, FormSchema } from "../forms/FormMachineDef";
 import { LoginContext } from "../forms/LoginFormMachine";
-import { AuthContext, AuthEvent, AuthSchema } from "./AuthMachineDef";
+import { AuthEvent, AuthSchema } from "./AuthMachineDef";
 
 export interface AuthProps {
     loginMachine?: [
@@ -11,9 +11,9 @@ export interface AuthProps {
         Interpreter<LoginContext, FormSchema, FormEvents>
     ],
     authMachine?: [
-        State<AuthContext, AuthEvent, AuthSchema>,
-        Interpreter<AuthContext, AuthSchema, AuthEvent>['send'],
-        Interpreter<AuthContext, AuthSchema, AuthEvent>
+        State<any, AuthEvent, AuthSchema>,
+        Interpreter<void, AuthSchema, AuthEvent>['send'],
+        Interpreter<void, AuthSchema, AuthEvent>
     ]
 }
 

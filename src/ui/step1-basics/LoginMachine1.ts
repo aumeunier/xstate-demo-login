@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { assign, Machine } from 'xstate';
-import { LoginEvents } from '../../../logic/LoginEvents';
-import { LoginStates } from '../../../logic/LoginStates';
+import { LoginEvents } from '../../domain/login/LoginEvents';
+import { LoginStates } from '../../domain/login/LoginStates';
 
 interface LoginContext {
     login?: string;

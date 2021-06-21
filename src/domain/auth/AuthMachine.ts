@@ -1,8 +1,8 @@
 import { Machine } from 'xstate';
-import { AuthContext, AuthEvent, AuthEvents, AuthSchema, AuthStates } from './AuthMachineDef';
+import { AuthEvent, AuthEvents, AuthSchema, AuthStates } from './AuthMachineDef';
 
 
-export const AuthMachine = Machine<AuthContext, AuthSchema, AuthEvent>({
+export const AuthMachine = Machine<void, AuthSchema, AuthEvent>({
     id: 'auth',
     initial: AuthStates.SignIn,
 
