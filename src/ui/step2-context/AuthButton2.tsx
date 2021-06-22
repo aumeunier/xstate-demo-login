@@ -32,7 +32,7 @@ export const AuthButton = ({ machine, sendToMachine }: AuthButtonProps) => {
       color = "bg-gray-300";
       break;
     case LoginStates.AuthenticationFailed:
-      validationText = "Retry ?";
+      validationText = "Retry?";
       color = "bg-red-600";
       break;
   }
