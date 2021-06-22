@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { assign } from "xstate";
+import { assign, DoneEventObject } from "xstate";
 import { CreateFormMachine } from "./FormMachine";
 import { FormEvents } from "./FormMachineDef";
 
@@ -7,16 +7,16 @@ export type RegisterContext = {
     login?: string;
     password?: string;
     consent?: boolean;
+    invalidMessage?: string,
     invalidLogin?: boolean,
     invalidConsent?: boolean,
-    invalidPasswordMessage?: string,
 }
 
 export const RegisterFormMachine = CreateFormMachine<RegisterContext>({
     guards: {
-        isFormComplete: (context: RegisterContext) => true,
-        isFormIncomplete: (context: RegisterContext) => true,
-        isFormValidated: (context: RegisterContext) => true,
+        isFormComplete: (context: RegisterContext) => !_.isEmpty(context.login) && !_.isEmpty(context.password),
+        isFormIncomplete: (context: RegisterContext) => _.isEmpty(context.login) || _.isEmpty(context.password),
+        isFormValidated: (context: RegisterContext, event: DoneEventObject) => event.data === true,
         shouldBlock: (context: RegisterContext) => true,
     },
     services: {

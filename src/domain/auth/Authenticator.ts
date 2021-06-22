@@ -2,6 +2,7 @@ import React from "react";
 import { Interpreter, State } from "xstate";
 import { FormEvents, FormSchema } from "../forms/FormMachineDef";
 import { LoginContext } from "../forms/LoginFormMachine";
+import { RegisterContext } from "../forms/RegisterFormMachine";
 import { AuthEvent, AuthSchema } from "./AuthMachineDef";
 
 export interface AuthProps {
@@ -14,6 +15,11 @@ export interface AuthProps {
         State<any, AuthEvent, AuthSchema>,
         Interpreter<void, AuthSchema, AuthEvent>['send'],
         Interpreter<void, AuthSchema, AuthEvent>
+    ],
+    registerMachine?: [
+        State<RegisterContext, FormEvents, FormSchema>,
+        Interpreter<RegisterContext, FormSchema, FormEvents>['send'],
+        Interpreter<RegisterContext, FormSchema, FormEvents>
     ]
 }
 

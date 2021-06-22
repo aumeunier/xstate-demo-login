@@ -1,20 +1,26 @@
 import _ from "lodash";
 import React, { useContext } from "react";
 import { Authenticator } from "../../domain/auth/Authenticator";
+import { AuthStates } from "../../domain/auth/AuthMachineDef";
 import { FormEvent, FormStates } from "../../domain/forms/FormMachineDef";
 import { LoginStates } from "../../domain/login/LoginStates";
 import { Button } from "../components/Button";
 
 export const AuthButton = () => {
   // This component uses the auth context
-  const { loginMachine: authMachine } = useContext(Authenticator);
-  const [machine, authAction] = authMachine!;
+  const { loginMachine, registerMachine, authMachine } =
+    useContext(Authenticator);
+  const [{ value: authState }] = authMachine!;
+  const [machine, authAction, authInterpreter] = (
+    authState === AuthStates.Register ? registerMachine : loginMachine
+  )!;
 
   // This is Pure, it will always display the same thing
   // given the context/current state of the machine
   const { value: currentState, context } = machine;
 
-  let validationText = "Log in";
+  let validationText =
+    authState === AuthStates.Register ? "Register" : "Log in";
   let color = undefined;
   switch (currentState) {
     case FormStates.Editing:
