@@ -1,4 +1,4 @@
-import { LoginStates } from "./LoginStates";
+import { LoginStates } from "../../domain/login/LoginStates";
 
 export type LoginContext = {
     login?: string;

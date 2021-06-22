@@ -2,23 +2,27 @@ import { useMachine } from "@xstate/react";
 import _ from "lodash";
 import React from "react";
 import { LoginEvents } from "../../domain/login/LoginEvents";
-import { LoginMachineV2 } from "../../domain/login/LoginMachine.step2";
 import { LoginStates } from "../../domain/login/LoginStates";
 import { FormInput } from "../components/FormInput";
 import { LoginHeader } from "../components/LoginHeader";
 import { OtherActions } from "../components/OtherActions";
 import { AuthButton } from "./AuthButton2";
+import { LoginMachineV2 } from "./LoginMachine.step2";
 
 export const LoginXStateV2 = () => {
   const [machine, sendToMachine, machineInterpreter] =
     useMachine(LoginMachineV2);
+  // This is the node/state the machine is currently in
   const currentState = machine.value;
+  // This is the current context of the machine (~React state)
   const { invalidLogin, invalidPasswordMessage } = machine.context;
 
   // This helps to debug ;)
   machineInterpreter.onTransition((current) =>
     console.debug(`Machine transitions to ${current.value}`)
   );
+
+  // ... No side effect in the component, no state, no booleans
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">

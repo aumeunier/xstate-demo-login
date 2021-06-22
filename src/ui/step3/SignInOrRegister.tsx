@@ -32,7 +32,6 @@ export const LoginOrRegister = () => {
           additionalClasses="rounded-t-md"
           isInvalid={!!invalidMessage}
           disabled={_.includes(
-            // TODO: in Machine ? (service or something)
             [FormStates.Submitting, FormStates.Validated],
             currentState
           )}

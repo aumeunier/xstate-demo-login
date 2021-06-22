@@ -11,6 +11,7 @@ import { LoginMachineStep1 } from "./LoginMachine1";
 export const LoginXState1 = () => {
   // Initialize a machine
   const [machine, sendToMachine] = useMachine(LoginMachineStep1);
+  // const { login, password } = machine.context;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">

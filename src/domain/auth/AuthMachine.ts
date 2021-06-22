@@ -1,8 +1,7 @@
 import { Machine } from 'xstate';
 import { AuthEvent, AuthEvents, AuthSchema, AuthStates } from './AuthMachineDef';
 
-
-export const AuthMachine = Machine<void, AuthSchema, AuthEvent>({
+export const AuthMachineConfig = {
     id: 'auth',
     initial: AuthStates.SignIn,
 
@@ -25,6 +24,9 @@ export const AuthMachine = Machine<void, AuthSchema, AuthEvent>({
                 [AuthEvents.Forgot]: AuthStates.Forgot,
             }
         },
-        [AuthStates.Authenticated]: { type: "final" },
+        [AuthStates.Authenticated]: {
+            // type: "final"
+        },
     },
-});
+};
+export const AuthMachine = Machine<void, AuthSchema, AuthEvent>(AuthMachineConfig);

@@ -9,7 +9,7 @@ export const LoginV2 = () => {
   const [login, setLogin] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isValidLogin, setIsValidLogin] = useState<boolean>(false);
-  // Let's start the boolean dance
+  // Let's start the boolean dance :(
   const [canValidate, setCanValidate] = useState<boolean>(false);
   const [isValidPwd, setIsValidPwd] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -25,6 +25,7 @@ export const LoginV2 = () => {
     return res;
   };
 
+  // We also probably need to declare side effects when our values change
   useEffect(() => {
     const loginIsValid = !_.isEmpty(login);
     const passwordIsValid = !!(password && password.length > 6);

@@ -6,8 +6,12 @@ import { LoginStates } from "../../domain/login/LoginStates";
 import { Button } from "../components/Button";
 
 export const AuthButton = () => {
+  // This component uses the auth context
   const { loginMachine: authMachine } = useContext(Authenticator);
   const [machine, authAction] = authMachine!;
+
+  // This is Pure, it will always display the same thing
+  // given the context/current state of the machine
   const { value: currentState, context } = machine;
 
   let validationText = "Log in";

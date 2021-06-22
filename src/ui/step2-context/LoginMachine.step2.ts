@@ -1,14 +1,12 @@
 import _ from 'lodash';
 import { assign, Machine } from 'xstate';
-import { LoginEvents } from './LoginEvents';
+import { LoginEvents } from '../../domain/login/LoginEvents';
+import { LoginStates } from '../../domain/login/LoginStates';
 import type { LoginContext, LoginEvent, LoginSchema } from './LoginMachineDef';
-import { LoginStates } from './LoginStates';
 
 
-const onUpdate = {
-    target: LoginStates.Editing,
-    actions: "update"
-};
+const onUpdate = { target: LoginStates.Editing, actions: "update" }; // That's just an utility to avoid repeating itself
+
 export const LoginMachineV2 = Machine<LoginContext, LoginSchema, LoginEvent>({
     id: 'login.step2',
     initial: LoginStates.Editing,
@@ -16,9 +14,9 @@ export const LoginMachineV2 = Machine<LoginContext, LoginSchema, LoginEvent>({
     // State definitions
     states: {
         [LoginStates.Editing]: {
-            always: [{
+            always: [{ // This condition is checked every time we enter that state
                 target: LoginStates.EditingComplete,
-                cond: 'credentialsFilled',
+                cond: 'credentialsFilled', // This is now a "guard"
             }],
             on: {
                 [LoginEvents.UpdateLogin]: onUpdate,
@@ -27,8 +25,8 @@ export const LoginMachineV2 = Machine<LoginContext, LoginSchema, LoginEvent>({
         },
         [LoginStates.EditingComplete]: {
             always: [
-                { target: LoginStates.InvalidCredentials, cond: 'loginIsInvalid', actions: 'updateError' },
-                { target: LoginStates.InvalidCredentials, cond: 'passwordIsInvalid', actions: 'updateError' },
+                { target: LoginStates.InvalidCredentials, cond: 'loginIsInvalid', actions: 'updateError' }, // guard + action
+                { target: LoginStates.InvalidCredentials, cond: 'passwordIsInvalid', actions: 'updateError' }, // guard + action
             ],
             on: {
                 [LoginEvents.UpdateLogin]: onUpdate,
@@ -46,13 +44,14 @@ export const LoginMachineV2 = Machine<LoginContext, LoginSchema, LoginEvent>({
                     target: LoginStates.Authenticated,
                     cond: (context, event) => {
                         return event?.data === true;
-                    },
+                    }, // Inlined guard, to transition conditionally
                 }, {
                     target: LoginStates.AuthenticationFailed,
                 }]
             }
         },
         [LoginStates.InvalidCredentials]: {
+            // We can handle some actions when transiting in or out of a state
             entry: ['updateError'],
             exit: ['updateError'],
             on: {
@@ -70,10 +69,11 @@ export const LoginMachineV2 = Machine<LoginContext, LoginSchema, LoginEvent>({
         [LoginStates.Authenticated]: {
             type: "final"
         },
-        // TODO: Too many tentatives, you have been blocked!
     },
 },
+    // The default implementations can be declared here
     {
+        // The guards are conditions on transitions
         guards: {
             loginIsInvalid: (context: LoginContext): boolean =>
                 _.isEmpty(context.login),
@@ -81,6 +81,7 @@ export const LoginMachineV2 = Machine<LoginContext, LoginSchema, LoginEvent>({
                 !(context.password && context.password.length > 6),
             credentialsFilled: (context: LoginContext): boolean => !_.isEmpty(context.login) && !_.isEmpty(context.password),
         },
+        // The services are invocations (see Submitting state)
         services: {
             submitAsync: async (context: LoginContext): Promise<boolean> => {
                 console.debug(`Authenticating with: ${context.login} -- ${context.password}`)
@@ -92,11 +93,14 @@ export const LoginMachineV2 = Machine<LoginContext, LoginSchema, LoginEvent>({
                 return Promise.resolve(success);
             }
         },
+        // Actions are fire-and-forget effects
         actions: {
             updateError: assign((context: LoginContext, event: LoginEvent) => {
                 const login = 'login' in event ? event.login : context.login;
                 const password = 'password' in event ? event.password : context.password;
                 return {
+                    login,
+                    password,
                     invalidLogin: _.isEmpty(login),
                     invalidPasswordMessage: (password?.length ?? 0) > 6 ? undefined : "Trop court!",
                 }

@@ -29,7 +29,7 @@ const onFormUpdate = { target: FormStates.Editing, actions: "onUpdate" };
  * Note that the "context" is set as 'any' because the machine itself does not
  * deal with the context within the form.
  */
-const FormMachineConfig: MachineConfig<any, FormSchema, FormEvents> = {
+export const FormMachineConfig: MachineConfig<any, FormSchema, FormEvents> = {
     id: 'formMachine',
     initial: FormStates.Editing,
 
@@ -54,7 +54,7 @@ const FormMachineConfig: MachineConfig<any, FormSchema, FormEvents> = {
         },
         [FormStates.Submitting]: {
             invoke: {
-                src: "submitAsync",
+                src: "submitAsync", // We could also call a machine here...
                 onError: [{
                     target: FormStates.Blocked,
                     cond: "shouldBlock",

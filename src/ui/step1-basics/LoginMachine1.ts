@@ -3,10 +3,19 @@ import { assign, Machine } from 'xstate';
 import { LoginEvents } from '../../domain/login/LoginEvents';
 import { LoginStates } from '../../domain/login/LoginStates';
 
+const onUpdate = { target: LoginStates.Editing, actions: "update" }; // That's just an utility to avoid repeating itself
+
+/**
+ * This is pretty much the ~state of the machine
+ */
 interface LoginContext {
     login?: string;
     password?: string;
 }
+/**
+ * The schema is the structure the machine has to respect,
+ * especially the states (nodes) it has to support.
+ */
 interface LoginSchema {
     states: {
         [LoginStates.Editing]: {},
@@ -17,28 +26,15 @@ interface LoginSchema {
         [LoginStates.Authenticated]: {},
     }
 }
-export type UpdateLogin = {
-    type: LoginEvents.UpdateLogin,
-    login: string,
-}
-export type UpdatePassword = {
-    type: LoginEvents.UpdatePassword,
-    password: string,
-}
-export type LoginEvent =
-    | { type: LoginEvents }
-    | UpdateLogin
-    | UpdatePassword;
-
-export const loginIsValid = (context: LoginContext): boolean =>
-    !_.isEmpty(context.login);
-export const passwordIsValid = (context: LoginContext): boolean =>
-    !!(context.password && context.password.length > 6);
-
-const onUpdate = {
-    target: LoginStates.Editing,
-    actions: "update"
-};
+/**
+ * This is the Machine definition.
+ * It should declare:
+ * - the context of the machine
+ * - the available states (nodes) the machine can be in, and the available transitions within (the events to respond to when in a given state)
+ * - the initial state
+ *
+ * You can also specify services, guards, actions...
+ */
 export const LoginMachineStep1 = Machine<LoginContext, LoginSchema, LoginEvent>({
     id: 'login.step1',
     initial: LoginStates.Editing,
@@ -114,3 +110,23 @@ export const LoginMachineStep1 = Machine<LoginContext, LoginSchema, LoginEvent>(
             }),
         }
     });
+
+export type UpdateLogin = {
+    type: LoginEvents.UpdateLogin,
+    login: string,
+}
+export type UpdatePassword = {
+    type: LoginEvents.UpdatePassword,
+    password: string,
+}
+
+// All the available events for this machine
+export type LoginEvent =
+    | { type: LoginEvents.Validate }
+    | UpdateLogin
+    | UpdatePassword;
+
+export const loginIsValid = (context: LoginContext): boolean =>
+    !_.isEmpty(context.login);
+export const passwordIsValid = (context: LoginContext): boolean =>
+    !!(context.password && context.password.length > 6);
