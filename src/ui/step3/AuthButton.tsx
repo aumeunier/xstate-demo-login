@@ -35,7 +35,7 @@ export const AuthButton = () => {
       color = "bg-gray-300";
       break;
     case FormStates.ValidationFailed:
-      validationText = context.invalidMessage ?? "Retry ?";
+      validationText = context.invalidMessage ?? "Retry?";
       color = "bg-red-600";
       break;
   }
